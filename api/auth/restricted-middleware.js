@@ -5,14 +5,15 @@ module.exports = (req, res, next) => {
   const secret = process.env.JWT_SECRET || 'this is my secret!';
 
   if (token) {
-    jwt.verify(token, secret, {}, (err, decoded) => {
+    jwt.verify(token, secret, {}, (err, decodeToken) => {
       if (err) {
         //invalid token
         res.status(401).json({ you: 'shall not pass' });
       } else {
         //valid token
 
-        req.jwt = { username: decoded.username, user_id: decoded.subject };
+        // req.jwt = { username: decodeToken.username, userId: decodeToken.subject };
+        req.user = { username: decodeToken.username, id: decodeToken.subject };
 
         next();
       }

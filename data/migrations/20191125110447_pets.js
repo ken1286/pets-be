@@ -11,7 +11,7 @@ exports.up = function(knex) {
       .onUpdate('CASCADE');
 
     pets.string('name', 128).notNullable();
-    pets.string('password', 128).notNullable();
+    pets.string('species', 128).notNullable();
   });
 };
 
