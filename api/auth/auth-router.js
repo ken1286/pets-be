@@ -2,11 +2,11 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const Users = require('../models/users/users-model.js');
+const Users = require('../models/users-model.js');
 
 // Load error handling and validation for inputs
-const validateRegisterInput = require('../validation/register');
-const validateLoginInput = require('../validation/login');
+const validateRegisterInput = require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
 
 // for endpoints beginning with /api/auth
 router.post('/register', (req, res) => {
