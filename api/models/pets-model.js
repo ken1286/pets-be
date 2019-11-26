@@ -3,7 +3,8 @@ const db = require('../../data/dbConfig.js');
 module.exports = {
   getPets,
   addPet,
-  getPetById
+  getPetById,
+  addPet
 };
 
 function getPets(userId) {
@@ -18,7 +19,7 @@ function getPetById(petId, userId) {
     .first();
 }
 
-async function addPet(petObject) {
+async function addPet(petObject, userId) {
   const [id] = await db('pets').insert(petObject);
-  return id;
+  return getPets(userId);
 }
