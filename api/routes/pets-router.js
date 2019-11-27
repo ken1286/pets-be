@@ -17,7 +17,9 @@ cloudinary.config({
 });
 
 const imageUploader = (req, res, next) => {
+  console.log(req);
   const file = req.files.photo;
+
   cloudinary.uploader.upload(file.tempFilePath, function(err, result) {
     if (err) {
       console.log('Error! ', err);
