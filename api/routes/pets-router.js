@@ -18,18 +18,22 @@ cloudinary.config({
 
 const imageUploader = (req, res, next) => {
   console.log(req);
-  const file = req.files.photo;
+  if (req.files) {
+    const file = req.files.photo;
 
-  cloudinary.uploader.upload(file.tempFilePath, function(err, result) {
-    if (err) {
-      console.log('Error! ', err);
-      res.status(500).json({ message: 'File failed to upload' });
-    } else {
-      console.log('Result! ', result);
-      req.body = { ...req.body, imageUrl: result.secure_url };
-      next();
-    }
-  });
+    cloudinary.uploader.upload(file.tempFilePath, function(err, result) {
+      if (err) {
+        console.log('Error! ', err);
+        res.status(500).json({ message: 'File failed to upload' });
+      } else {
+        console.log('Result! ', result);
+        req.body = { ...req.body, imageUrl: result.secure_url };
+        next();
+      }
+    });
+  } else {
+    next();
+  }
 };
 
 // router.post('/upload', restricted, (req, res) => {
@@ -102,6 +106,39 @@ router.post('/', restricted, imageUploader, (req, res) => {
     })
     .catch(err => {
       res.status(500).json({ err });
+    });
+});
+
+router.put('/:id', restricted, imageUploader, (req, res) => {
+  const petId = req.params.id;
+  const userId = req.user.id;
+  const changes = req.body;
+
+  Pets.updatePet(petId, userId, changes)
+    .then(pets => {
+      if (!pets) {
+        res
+          .status(404)
+          .json({ message: 'No pet found with this ID for current user.' });
+      } else {
+        res.status(200).json({ pets });
+      }
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    });
+});
+
+router.delete('/:id', restricted, (req, res) => {
+  const petId = req.params.id;
+  const userId = req.user.id;
+
+  Pets.deletePet(petId, userId)
+    .then(pets => {
+      res.status(204).json({ pets });
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Pet not found.' });
     });
 });
 

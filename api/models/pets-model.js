@@ -4,7 +4,9 @@ module.exports = {
   getPets,
   addPet,
   getPetById,
-  addPet
+  addPet,
+  updatePet,
+  deletePet
 };
 
 function getPets(userId) {
@@ -21,5 +23,28 @@ function getPetById(petId, userId) {
 
 async function addPet(petObject, userId) {
   const [id] = await db('pets').insert(petObject);
+  return getPets(userId);
+}
+
+async function updatePet(petId, userId, changes) {
+  const oldPet = await db('pets')
+    .where({ 'pets.id': petId, 'pets.user_id': userId })
+    .first();
+
+  const newPet = { ...oldPet, ...changes };
+
+  await db('pets')
+    .where({ 'pets.id': petId })
+    .first()
+    .update(newPet);
+
+  return getPets(userId);
+}
+
+async function deletePet(petId, userId) {
+  await db('pets')
+    .where({ 'pets.id': petId, 'pets.user_id': userId })
+    .del();
+
   return getPets(userId);
 }
