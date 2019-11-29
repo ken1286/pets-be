@@ -10,6 +10,7 @@ const validateLoginInput = require('../../validation/login');
 
 // for endpoints beginning with /api/auth
 router.post('/register', (req, res) => {
+  console.log(req.body);
   // INPUT VALIDATION EXPLANATION
   // Pass { username: "username", password: "password"} into the validation function.
   // Inside the validation function it checks that the username and password meets certain criteria.
@@ -17,11 +18,15 @@ router.post('/register', (req, res) => {
   // If there is an error, we return a status 400 along with the errors object that includes all the error descriptions that were encountered
   const { errors, isValid } = validateRegisterInput(req.body);
 
+  if (req.body.password !== req.body.password2) {
+    return res.status(400).json({ message: "Passwords don't match!" });
+  }
+
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
-  const user = req.body;
+  const user = { username: req.body.username, password: req.body.password };
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
   user.password = hash;
 
@@ -31,7 +36,7 @@ router.post('/register', (req, res) => {
       if (user1) {
         res
           .status(409)
-          .json({ username: 'A user with that name already exists' });
+          .json({ message: 'A user with that name already exists' });
       } else {
         Users.add(user).then(saved => {
           Users.findBy({ username: user.username })

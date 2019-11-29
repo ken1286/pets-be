@@ -59,7 +59,7 @@ const imageUploader = (req, res, next) => {
 
 router.get('/', restricted, (req, res) => {
   console.log(req.user);
-  const { id: userId } = req.user;
+  const userId = req.user.id;
 
   Pets.getPets(userId)
     .then(pets => {
@@ -132,9 +132,11 @@ router.put('/:id', restricted, imageUploader, (req, res) => {
 router.delete('/:id', restricted, (req, res) => {
   const petId = req.params.id;
   const userId = req.user.id;
+  console.log(req);
 
   Pets.deletePet(petId, userId)
     .then(pets => {
+      console.log(pets);
       res.status(204).json({ pets });
     })
     .catch(err => {
