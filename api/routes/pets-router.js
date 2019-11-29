@@ -92,7 +92,9 @@ router.get('/:id', restricted, (req, res) => {
 });
 
 router.post('/', restricted, imageUploader, (req, res) => {
-  const pet = { ...req.body, user_id: req.user.id };
+  const userId = req.user.id;
+  const pet = { ...req.body, user_id: userId };
+
   console.log('Pet: ', pet);
   if (!pet.name || !pet.species || !pet.user_id) {
     res
@@ -100,7 +102,7 @@ router.post('/', restricted, imageUploader, (req, res) => {
       .json({ message: "You're missing data from a required field" });
   }
 
-  Pets.addPet(pet, req.user.id)
+  Pets.addPet(pet, userId)
     .then(pets => {
       res.status(201).json({ pets });
     })

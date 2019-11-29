@@ -22,7 +22,7 @@ function getPetById(petId, userId) {
 }
 
 async function addPet(petObject, userId) {
-  const [id] = await db('pets').insert(petObject);
+  await db('pets').insert(petObject);
   return getPets(userId);
 }
 
