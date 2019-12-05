@@ -17,7 +17,7 @@ cloudinary.config({
 });
 
 const imageUploader = (req, res, next) => {
-  console.log(req);
+  console.log('FILES ', req.files);
   if (req.files) {
     const file = req.files.photo;
 
@@ -35,27 +35,6 @@ const imageUploader = (req, res, next) => {
     next();
   }
 };
-
-// router.post('/upload', restricted, (req, res) => {
-//   const file = req.files.photo;
-//   const user = req.user;
-//   console.log(file);
-//   console.log(user);
-//   cloudinary.uploader.upload(file.tempFilePath, function(err, result) {
-//     if (err) {
-//       console.log('Error! ', err);
-//     } else {
-//       console.log('Result! ', result);
-//     }
-//   });
-//   // file.mv('./api/routes/uploads/' + file.name, function(err, result) {
-//   //   if (err) {
-//   //     throw err;
-//   //   } else {
-//   //     res.status(200).json({ success: true, message: 'file uploaded' });
-//   //   }
-//   // });
-// });
 
 router.get('/', restricted, (req, res) => {
   console.log(req.user);
