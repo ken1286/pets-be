@@ -13,6 +13,7 @@ exports.up = function(knex) {
     pets.string('name', 128).notNullable();
     pets.string('species', 128).notNullable();
     pets.string('imageUrl');
+    pets.integer('age');
   });
 };
 
