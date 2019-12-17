@@ -45,7 +45,7 @@ router.get('/', restricted, (req, res) => {
       res.status(200).json({ pets });
     })
     .catch(err => {
-      res.status(500).json({ message: 'Could not retrieve pets.' });
+      res.status(500).json({ message: 'Error getting pets for the user.' });
     });
 });
 
@@ -86,7 +86,7 @@ router.post('/', restricted, imageUploader, (req, res) => {
       res.status(201).json({ pets });
     })
     .catch(err => {
-      res.status(500).json({ err });
+      res.status(500).json({ message: 'Error adding the pet' });
     });
 });
 
@@ -106,7 +106,7 @@ router.put('/:id', restricted, imageUploader, (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'Error updating the location.' });
     });
 });
 
@@ -118,7 +118,7 @@ router.delete('/:id', restricted, (req, res) => {
   Pets.deletePet(petId, userId)
     .then(pets => {
       console.log(pets);
-      res.status(204).json({ pets });
+      res.status(200).json({ message: 'The pet has been deleted.' });
     })
     .catch(err => {
       res.status(500).json({ message: 'Pet not found.' });
